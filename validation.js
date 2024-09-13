@@ -15,7 +15,9 @@ function validateDob(dob) {
 }
 
 function validateEmail(email) {
-  if (typeof email !== "array") {
+  if (!(typeof email === "object" && email.constructor === Array)) {
+    const t = typeof email;
+    console.log('email type', t);
     return { error: '"email" must be an array' };
   }
 
@@ -41,35 +43,22 @@ export function validateUser(user) {
     errors.push(tmpError);
   }
 
-  if (tmpError = validateEmail(email)) {
-    errors.push(tmpError);
-  }
+  errors.push(...(validateEmail(email) ?? []));
 
   return [{ userId, name, dob, email }, errors];
-}
-
-export async function getUserById(docClient, userId) {
-  const command = new GetCommand({
-    TableName: USERS_TABLE,
-    Key: { userId },
-  });
-
-  const { Item } = await docClient.send(command);
-
-  return Item;
 }
 
 export function validateEmailModRules(dbUserEmail, userEmails) {
   const errors = [];
   for (let e of dbUserEmail) {
-    if (!userEmails.contains(e)) {
+    if (!userEmails.some(x => x === e)) {
       errors.push({ error: `${e} email missing in payload`})
     }
   }
 
   if (errors.length > 0) return errors;
 
-  errors.push(...validateEmail(userEmails));
+  errors.push(...(validateEmail(userEmails) ?? []));
 
   return errors;
 }
