@@ -1,18 +1,18 @@
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
-const {
+import {
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
-} = require("@aws-sdk/lib-dynamodb");
+} from "@aws-sdk/lib-dynamodb";
 
-const express = require("express");
-const serverless = require("serverless-http");
+import express  from "express";
+import serverless from "serverless-http";
 
-const {
-  validateDob,
-  validateUser
-} = require('./tools');
+import {
+  validateUser,
+  getUserById
+} from './tools.js';
 
 const app = express();
 
@@ -24,17 +24,10 @@ app.use(express.json());
 
 app.get("/users/:userId", async (req, res) => {
   try {
-    const command = new GetCommand({
-      TableName: USERS_TABLE,
-      Key: {
-        userId: req.params.userId,
-      },
-    });
-
-    const { Item } = await docClient.send(command);
-    if (Item) {
-      const { userId, name } = Item;
-      res.json({ userId, name });
+    const user = getUserById(docClient, req.params.userId);
+    if (user) {
+      const { userId, name, dob, email } = user;
+      res.json({ userId, name, dob, email });
     } else {
       res
         .status(404)
@@ -47,33 +40,62 @@ app.get("/users/:userId", async (req, res) => {
 });
 
 app.post("/users", async (req, res) => {
-  const [{ userId, name, dob, email, email2, email3 }, errors] = validateUser(req.body);
+  const [user, errors] = validateUser(req.body);
 
   if (errors.length > 0) {
     res
-      .status
+      .status(400)
       .json({ errors });
+
+    return;
   }
 
   try {
-    const item = { userId, name, dob, email, email2, email3 };
     const command = new PutCommand({
       TableName: USERS_TABLE,
-      Item: item,
+      Item: user,
     });
     await docClient.send(command);
-    res.json(item);
+    res.json(user);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not create user" });
   }
 });
 
-// app.put("/users/:userId", async (req, res) => {
-//   const { userId, name } = req.body;
+app.put("/users/:userId", async (req, res) => {
+  const [user, errors] = validateUser(req.body);
 
+  if (req.params.userId !== user.userId) {
+    errors.push({error: "\"userId\" does not match the URL's \"userId\"" });
+  }
 
-// });
+  const dbUser = getUserById(docClient, req.params.userId);
+
+  if (!dbUser) {
+    errors.push({ error: 'No user found for userId in URL' });
+  }
+
+  errors.push(...validateEmailModRules(dbUser.email, user.email));
+
+  if (errors.length > 0) {
+    res
+      .status(400)
+      .json({ errors });
+  }
+
+  try {
+    const command = new PutCommand({
+      TableName: USERS_TABLE,
+      Item: user,
+    });
+    await docClient.send(command);
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not create user" });
+  }
+});
 
 app.use((req, res, next) => {
   return res.status(404).json({
@@ -81,4 +103,4 @@ app.use((req, res, next) => {
   });
 });
 
-exports.handler = serverless(app);
+export const handler = serverless(app);
