@@ -5,22 +5,6 @@ import { jest } from '@jest/globals';
 import { getUserHandler } from "../router.js";
 import dbF from "../db-api.js";
 
-// const mockGetUserById = jest.fn();
-// , () => {
-//   return {
-//     getUserById: (userId) => {
-//       mockGetUserById.mockImplementation(() => {
-//         return {
-//           userId,
-//           name: 'Mock User',
-//           dob: '12/1/2005',
-//           email: ['bob@mail.com'],
-//         };
-//       })();
-//     }
-//   };
-// });
-
 const mockUser = {
   userId: 1,
   name: 'Mock User',
