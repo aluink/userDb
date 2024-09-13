@@ -107,7 +107,7 @@ export async function deleteUserHandler(req, res) {
   try {
     const { userId } = req.params;
     await dbClient.deleteUserById(userId);
-    res.bar().status(204).send();
+    res.status(204).send();
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not create user" });
