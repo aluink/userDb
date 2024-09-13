@@ -9,6 +9,11 @@ const {
 const express = require("express");
 const serverless = require("serverless-http");
 
+const {
+  validateDob,
+  validateUser
+} = require('./tools');
+
 const app = express();
 
 const USERS_TABLE = process.env.USERS_TABLE;
@@ -18,15 +23,14 @@ const docClient = DynamoDBDocumentClient.from(client);
 app.use(express.json());
 
 app.get("/users/:userId", async (req, res) => {
-  const params = {
-    TableName: USERS_TABLE,
-    Key: {
-      userId: req.params.userId,
-    },
-  };
-
   try {
-    const command = new GetCommand(params);
+    const command = new GetCommand({
+      TableName: USERS_TABLE,
+      Key: {
+        userId: req.params.userId,
+      },
+    });
+
     const { Item } = await docClient.send(command);
     if (Item) {
       const { userId, name } = Item;
@@ -43,27 +47,33 @@ app.get("/users/:userId", async (req, res) => {
 });
 
 app.post("/users", async (req, res) => {
-  const { userId, name } = req.body;
-  if (typeof userId !== "string") {
-    res.status(400).json({ error: '"userId" must be a string' });
-  } else if (typeof name !== "string") {
-    res.status(400).json({ error: '"name" must be a string' });
+  const [{ userId, name, dob, email, email2, email3 }, errors] = validateUser(req.body);
+
+  if (errors.length > 0) {
+    res
+      .status
+      .json({ errors });
   }
 
-  const params = {
-    TableName: USERS_TABLE,
-    Item: { userId, name },
-  };
-
   try {
-    const command = new PutCommand(params);
+    const item = { userId, name, dob, email, email2, email3 };
+    const command = new PutCommand({
+      TableName: USERS_TABLE,
+      Item: item,
+    });
     await docClient.send(command);
-    res.json({ userId, name });
+    res.json(item);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not create user" });
   }
 });
+
+// app.put("/users/:userId", async (req, res) => {
+//   const { userId, name } = req.body;
+
+
+// });
 
 app.use((req, res, next) => {
   return res.status(404).json({
