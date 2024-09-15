@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start:dev": "serverless dev",
-    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest --silent"
   },
   "devDependencies": {
     "jest": "^29.7.0",

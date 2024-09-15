@@ -1,4 +1,4 @@
-function validateDob(dob) {
+export function validateDob(dob) {
   if (typeof dob !== 'string'){
     return { error: '"dob" must be a string' };
   }
@@ -14,7 +14,7 @@ function validateDob(dob) {
   }
 }
 
-function validateEmail(email) {
+export function validateEmailProperty(email) {
   if (!(typeof email === "object" && email.constructor === Array)) {
     const t = typeof email;
     console.log('email type', t);
@@ -30,7 +30,6 @@ export function validateUser(user) {
   const { userId, name, dob, email } = user;
   const errors = [];
   let tmpError;
-  // TODO genericize this, maybe
   if (typeof userId !== "string") {
     errors.push({ error: '"userId" must be a string' });
   }
@@ -43,7 +42,7 @@ export function validateUser(user) {
     errors.push(tmpError);
   }
 
-  errors.push(...(validateEmail(email) ?? []));
+  errors.push(...(validateEmailProperty(email) ?? []));
 
   return [{ userId, name, dob, email }, errors];
 }
@@ -52,13 +51,13 @@ export function validateEmailModRules(dbUserEmail, userEmails) {
   const errors = [];
   for (let e of dbUserEmail) {
     if (!userEmails.some(x => x === e)) {
-      errors.push({ error: `${e} email missing in payload`})
+      errors.push({ error: `${e} email missing in payload`});
     }
   }
 
   if (errors.length > 0) return errors;
 
-  errors.push(...(validateEmail(userEmails) ?? []));
+  errors.push(...(validateEmailProperty(userEmails) ?? []));
 
   return errors;
 }

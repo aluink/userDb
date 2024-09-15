@@ -5,21 +5,7 @@ import { jest } from '@jest/globals';
 import { deleteUserHandler, getUserHandler, postUserHandler, putUserHandler } from "../src/route-handlers.js";
 import dbF from "../src/db-api.js";
 
-const mockUser = {
-  userId: "1",
-  name: 'Mock User',
-  dob: '12/1/1995',
-  email: ['bob@mail.com'],
-};
-
-const mockUser2 = { ...mockUser, email: [] };
-
-const mockBadUser = {
-  userId: 1,
-  name: 'Mock User',
-  dob: '12/1/1995',
-  email: ['bob@mail.com'],
-};
+import { mockBadUser_UserId, mockUser, mockUser2 } from "./mocks.js";
 
 describe("handlers", () => {
   let res;
@@ -92,7 +78,7 @@ describe("handlers", () => {
       const spy = jest.spyOn(dbF, 'putUser');
       spy.mockResolvedValue();
 
-      const req = { body: mockBadUser };
+      const req = { body: mockBadUser_UserId };
       await postUserHandler(req, res);
 
       expect(res.status).toBeCalledWith(400);
@@ -140,7 +126,7 @@ describe("handlers", () => {
       const spy = jest.spyOn(dbF, 'putUser');
       spy.mockResolvedValue();
 
-      const req = { params: { userId: mockUser.userId }, body: mockBadUser };
+      const req = { params: { userId: mockUser.userId }, body: mockBadUser_UserId };
       await putUserHandler(req, res);
 
       expect(res.status).toBeCalledWith(400);
