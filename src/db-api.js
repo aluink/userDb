@@ -14,7 +14,6 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 class DbClient {
   async getUserById(userId) {
-    console.log('userId', userId);
     const command = new GetCommand({
       TableName: process.env.USERS_TABLE,
       Key: { userId },

@@ -29,7 +29,6 @@ export function validateDob(dob) {
 export function validateEmailProperty(email) {
   if (!(typeof email === "object" && email.constructor === Array)) {
     const t = typeof email;
-    console.log('email type', t);
     return [{ error: EMAIL_STRING_ERROR }];
   }
 

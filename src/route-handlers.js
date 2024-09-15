@@ -21,7 +21,7 @@ export async function getUserHandler(req, res) {
         .json({ error: 'Could not find user with provided "userId"' });
     }
   } catch (error) {
-    console.log(error, res);
+    console.error(error, res);
     res.status(500).json({ error: "Could not retrieve user" });
   }
 }
