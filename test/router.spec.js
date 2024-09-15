@@ -2,8 +2,8 @@
 
 import { jest } from '@jest/globals';
 
-import { deleteUserHandler, getUserHandler, postUserHandler, putUserHandler } from "../../src/route-handlers.js";
-import dbF from "../../src/db-api.js";
+import { deleteUserHandler, getUserHandler, postUserHandler, putUserHandler } from "../src/route-handlers.js";
+import dbF from "../src/db-api.js";
 
 const mockUser = {
   userId: "1",

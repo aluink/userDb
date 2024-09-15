@@ -1,8 +1,8 @@
 import request from "supertest";
-import { app } from "../../src/app.js";
+import { app } from "../src/app.js";
 import { jest } from '@jest/globals';
 
-import dbF from "../../src/db-api.js";
+import dbF from "../src/db-api.js";
 
 const mockUser = {
   userId: "1",
