@@ -1,6 +1,9 @@
 import { validateDob, validateEmailModRules, validateEmailProperty, validateUser } from "../src/validation.js";
 import { mockBadUser_Name, mockBadUser_UserId, mockBadUser_UserIdName, mockUser } from "./mocks.js";
 
+// We're specifically not checking error strings cause those aren't
+// necessarily business rules at this point.
+
 describe("validation", () => {
   describe("dob validation", () => {
     it('valiadates dob', () => {
