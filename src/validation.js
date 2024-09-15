@@ -1,16 +1,26 @@
+export const DOB_STRING_ERROR = '"dob" must be a string';
+export const DOB_FORMAT_ERROR = '"dob" must be a valid date format';
+export const DOB_PAST_ERROR = '"dob" must be in the past';
+
+export const EMAIL_STRING_ERROR = '"email" must be an array';
+export const EMAIL_LENGTH_ERROR = 'A maximum of three emails are allowed';
+
+export const USER_ID_STRING_ERROR = '"userId" must be a string';
+export const USER_NAME_STRING_ERROR = '"name" must be a string';
+
 export function validateDob(dob) {
   if (typeof dob !== 'string'){
-    return { error: '"dob" must be a string' };
+    return { error: DOB_STRING_ERROR };
   }
 
   const date = new Date(dob);
 
   if (!date) {
-    return { error: '"dob" must be a valid date format' };
+    return { error: DOB_FORMAT_ERROR };
   }
 
   if (new Date() < date) {
-    return { error: '"dob" must be in the past' };
+    return { error: DOB_PAST_ERROR };
   }
 }
 
@@ -18,11 +28,11 @@ export function validateEmailProperty(email) {
   if (!(typeof email === "object" && email.constructor === Array)) {
     const t = typeof email;
     console.log('email type', t);
-    return { error: '"email" must be an array' };
+    return { error: EMAIL_STRING_ERROR };
   }
 
   if (email.length > 3) {
-    return { error: 'A maximum of three emails are allowed' };
+    return { error: EMAIL_LENGTH_ERROR };
   }
 }
 
@@ -31,11 +41,11 @@ export function validateUser(user) {
   const errors = [];
   let tmpError;
   if (typeof userId !== "string") {
-    errors.push({ error: '"userId" must be a string' });
+    errors.push({ error: USER_ID_STRING_ERROR });
   }
 
   if (typeof name !== "string") {
-    errors.push({ error: '"name" must be a string' });
+    errors.push({ error: USER_NAME_STRING_ERROR });
   }
   
   if (tmpError = validateDob(dob)) {
