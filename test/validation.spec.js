@@ -5,49 +5,49 @@ describe("validation", () => {
   describe("dob validation", () => {
     it('valiadates dob', () => {
       const validation = validateDob('12/1/2005');
-      expect(validation).toBeUndefined();
+      expect(validation).toEqual([]);
     });
 
     it('fails when a number', () => {
       const validation = validateDob(123);
-      expect(validation).toEqual({ error: DOB_STRING_ERROR });
+      expect(validation).toEqual([{ error: DOB_STRING_ERROR }]);
     });
     
     it('fails when undefined', () => {
       const validation = validateDob();
-      expect(validation).toEqual({ error: DOB_STRING_ERROR });
+      expect(validation).toEqual([{ error: DOB_STRING_ERROR }]);
     });
     
     it('fails when in the future', () => {
       const validation = validateDob('1/1/2051');
-      expect(validation).toEqual({ error: DOB_PAST_ERROR });
+      expect(validation).toEqual([{ error: DOB_PAST_ERROR }]);
     });
   });
   
   describe('email validation', () => {
     it('validates an empty email array', () => {
       const validation = validateEmailProperty([]);
-      expect(validation).toBeUndefined();
+      expect(validation).toEqual([]);
     });
     
     it('validate a single email in an array', () => {
       const validation = validateEmailProperty(['bob@mail.com']);
-      expect(validation).toBeUndefined();
+      expect(validation).toEqual([]);
     });
     
     it('validates a full email array', () => {
       const validation = validateEmailProperty(['bob@mail.com', 'mary@mail.com', 'smith@longdomain.com']);
-      expect(validation).toBeUndefined();
+      expect(validation).toEqual([]);
     });
     
     it('fails when undefined', () => {
       const validation = validateEmailProperty();
-      expect(validation).toEqual({ error: EMAIL_STRING_ERROR });
+      expect(validation).toEqual([{ error: EMAIL_STRING_ERROR }]);
     });
     
     it('fails when too many emails', () => {
       const validation = validateEmailProperty(['bob@mail.com', 'mary@mail.com', 'smith@longdomain.com', 'toomany@mail.com']);
-      expect(validation).toEqual({ error: EMAIL_LENGTH_ERROR });
+      expect(validation).toEqual([{ error: EMAIL_LENGTH_ERROR }]);
     });
   });
   

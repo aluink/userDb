@@ -10,36 +10,39 @@ export const USER_NAME_STRING_ERROR = '"name" must be a string';
 
 export function validateDob(dob) {
   if (typeof dob !== 'string'){
-    return { error: DOB_STRING_ERROR };
+    return [{ error: DOB_STRING_ERROR }];
   }
 
   const date = new Date(dob);
 
   if (!date) {
-    return { error: DOB_FORMAT_ERROR };
+    return [{ error: DOB_FORMAT_ERROR }];
   }
 
   if (new Date() < date) {
-    return { error: DOB_PAST_ERROR };
+    return [{ error: DOB_PAST_ERROR }];
   }
+
+  return [];
 }
 
 export function validateEmailProperty(email) {
   if (!(typeof email === "object" && email.constructor === Array)) {
     const t = typeof email;
     console.log('email type', t);
-    return { error: EMAIL_STRING_ERROR };
+    return [{ error: EMAIL_STRING_ERROR }];
   }
 
   if (email.length > 3) {
-    return { error: EMAIL_LENGTH_ERROR };
+    return [{ error: EMAIL_LENGTH_ERROR }];
   }
+
+  return [];
 }
 
 export function validateUser(user) {
   const { userId, name, dob, email } = user;
   const errors = [];
-  let tmpError;
   if (typeof userId !== "string") {
     errors.push({ error: USER_ID_STRING_ERROR });
   }
@@ -48,11 +51,9 @@ export function validateUser(user) {
     errors.push({ error: USER_NAME_STRING_ERROR });
   }
   
-  if (tmpError = validateDob(dob)) {
-    errors.push(tmpError);
-  }
+  errors.push(...validateDob(dob));
 
-  errors.push(...(validateEmailProperty(email) ?? []));
+  errors.push(...validateEmailProperty(email));
 
   return [{ userId, name, dob, email }, errors];
 }
@@ -67,7 +68,7 @@ export function validateEmailModRules(dbUserEmail, userEmails) {
 
   if (errors.length > 0) return errors;
 
-  errors.push(...(validateEmailProperty(userEmails) ?? []));
+  errors.push(...validateEmailProperty(userEmails));
 
   return errors;
 }
