@@ -1,19 +1,39 @@
-# Serverless Framework Node Express API on AWS
+# User API in AWS Lambda
 
-This repository provisions an AWS Lambda app to handle HTTP requests via AWS API Gateway Additionally, it also handles provisioning of a DynamoDB database that is used for storing data about users. The Express.js application exposes four endpoints:
+This repository provisions an AWS Lambda app to handle HTTP requests via AWS API Gateway Additionally, it also handles the provisioning of a DynamoDB database that is used for storing data about users.
+
+## User Model
+
+```typescript
+  {
+    id: string;
+    name: string;
+    /* Any valid Javascript date format. */
+    dob: string;
+    email: string[];
+  }
+```
+
+Javascript date format information can be found [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format).
+
+The API exposes four endpoints:
 - `GET /user/:userId`
-  
-  URL_PARAMS: `userId` of the user to lookup\
-  RETURNS: A `user` object\
-  ERROR_CODES:\
-  - 200: on successfull lookup
-  - 404: when user not found
+
+  Returns a `user`.
   
 - `POST /users`
+
+  Creates a new user.
 - `PUT /user/:userId`
+
+  Updates a user.
 - `DELETE /user/:userId`
 
+  Deletes a user
+
 ## Usage
+
+These instructions assume the user has `serverless` installed and configured with deployment permissions to their AWS stack. For details on setting up a Serverless Dashboard provider, and other documentation, see this [link](https://www.serverless.com/framework/docs/guides/dashboard/providers).
 
 ### Deployment
 
@@ -48,13 +68,18 @@ _Note_: In current form, after deployment, your API is public and can be invoked
 After successful deployment, you can create a new user by calling the corresponding endpoint:
 
 ```
-curl --request POST 'https://xxxxxx.execute-api.us-east-1.amazonaws.com/users' --header 'Content-Type: application/json' --data-raw '{"name": "John", "userId": "someUserId"}'
+curl --request POST 'https://xxxxxx.execute-api.us-east-1.amazonaws.com/users' --header 'Content-Type: application/json' --data-raw '{"name": "John", "userId": "someUserId", "dob": "12/1/2003", "email": ["john@mail.com"] }'
 ```
 
 Which should result in the following response:
 
 ```json
-{ "userId": "someUserId", "name": "John" }
+  {
+    "name": "John",
+    "userId": "someUserId",
+    "dob": "12/1/2003",
+    "email": ["john@mail.com"]
+  }
 ```
 
 You can later retrieve the user by `userId` by calling the following endpoint:
@@ -66,7 +91,12 @@ curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/users/someUserId
 Which should result in the following response:
 
 ```json
-{ "userId": "someUserId", "name": "John" }
+  {
+    "name": "John",
+    "userId": "someUserId",
+    "dob": "12/1/2003",
+    "email": ["john@mail.com"]
+  }
 ```
 
 ### Local development
