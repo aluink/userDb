@@ -1,4 +1,4 @@
-import { DOB_PAST_ERROR, DOB_STRING_ERROR, EMAIL_LENGTH_ERROR, EMAIL_STRING_ERROR, USER_ID_STRING_ERROR, USER_NAME_STRING_ERROR, validateDob, validateEmailModRules, validateEmailProperty, validateUser } from "../src/validation.js";
+import { DOB_PAST_ERROR, DOB_STRING_ERROR, EMAIL_LENGTH_ERROR, EMAIL_ARRAY_ERROR, USER_ID_STRING_ERROR, USER_NAME_STRING_ERROR, validateDob, validateEmailModRules, validateEmailProperty, validateUser } from "../src/validation.js";
 import { mockBadUser_Name, mockBadUser_UserId, mockBadUser_UserIdName, mockUser } from "./mocks.js";
 
 describe("validation", () => {
@@ -42,7 +42,7 @@ describe("validation", () => {
     
     it('fails when undefined', () => {
       const validation = validateEmailProperty();
-      expect(validation).toEqual([{ error: EMAIL_STRING_ERROR }]);
+      expect(validation).toEqual([{ error: EMAIL_ARRAY_ERROR }]);
     });
     
     it('fails when too many emails', () => {

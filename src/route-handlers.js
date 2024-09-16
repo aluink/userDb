@@ -8,7 +8,7 @@ export async function getUserHandler(req, res) {
   try {
     const { userId } = req.params;
     if (!userId) {
-      res.status(400).json({ error: '"userId" required' });
+      res.status(400).json({ errors: [{ error: '"userId" required' }] });
       return;
     }
     const user = await dbClient.getUserById(userId);
@@ -18,11 +18,11 @@ export async function getUserHandler(req, res) {
     } else {
       res
         .status(404)
-        .json({ error: 'Could not find user with provided "userId"' });
+        .json({ errors: [{ error: 'Could not find user with provided "userId"' }] });
     }
   } catch (error) {
     console.error(error, res);
-    res.status(500).json({ error: "Could not retrieve user" });
+    res.status(500).json({ errors: [{ error: "Could not retrieve user" }] });
   }
 }
 
@@ -42,14 +42,14 @@ export async function postUserHandler(req, res) {
     res.status(201).json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Could not create user" });
+    res.status(500).json({ errors: [{ error: "Could not create user" }] });
   }
 }
 
 export async function putUserHandler(req, res) {
   const { userId } = req.params;
   if (!userId) {
-    res.status(400).json({ error: '"userId" required' });
+    res.status(400).json({ errors: [{ error: '"userId" required' }] });
     return;
   }
 
@@ -64,7 +64,7 @@ export async function putUserHandler(req, res) {
   }
 
   if (req.params.userId !== user.userId) {
-    res.status(400).json({error: "\"userId\" does not match the URL's \"userId\"" });
+    res.status(400).json({ errors: [{error: "\"userId\" does not match the URL's \"userId\"" }] });
     return;
   }
 
@@ -72,7 +72,7 @@ export async function putUserHandler(req, res) {
   if (!dbUser) {
     res
       .status(404)
-      .json({ error: 'Could not find user with provided "userId"' });
+      .json({ errors: [{ error: 'Could not find user with provided "userId"' }] });
 
     return;
   }
@@ -91,7 +91,7 @@ export async function putUserHandler(req, res) {
     res.status(200).json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Could not create user" });
+    res.status(500).json({ errors: [{ error: "Could not create user" }] });
   }
 }
 
@@ -102,6 +102,6 @@ export async function deleteUserHandler(req, res) {
     res.status(204).send();
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Could not create user" });
+    res.status(500).json({ errors: [{ error: "Could not create user" }] });
   }
 }
