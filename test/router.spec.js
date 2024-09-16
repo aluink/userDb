@@ -74,7 +74,7 @@ describe("handlers", () => {
       expect(res.status).toBeCalledWith(201);
     });
 
-    it("should return 404 when user is malformed", async () => {
+    it("should return 400 when user is malformed", async () => {
       const spy = jest.spyOn(dbF, 'putUser');
       spy.mockResolvedValue();
 
@@ -84,9 +84,24 @@ describe("handlers", () => {
       expect(res.status).toBeCalledWith(400);
     });
 
+    it("should return 400 when user already exists", async () => {
+      const spy = jest.spyOn(dbF, 'getUserById');
+      spy.mockResolvedValue(mockUser);
+
+      const req = { body: mockUser };
+      await postUserHandler(req, res);
+
+      expect(res.status).toBeCalledWith(400);
+    });
+
+
+
     it("should return 500 when DB call fails", async () => {
-      const spy = jest.spyOn(dbF, 'putUser');
-      spy.mockRejectedValue();
+      const putUserSpy = jest.spyOn(dbF, 'putUser');
+      putUserSpy.mockRejectedValue();
+
+      const getUserSpy = jest.spyOn(dbF, 'getUserById');
+      getUserSpy.mockResolvedValue();
 
       const req = { body: mockUser };
       await postUserHandler(req, res);

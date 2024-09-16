@@ -37,6 +37,15 @@ export async function postUserHandler(req, res) {
     return;
   }
 
+  const existingUser = await dbClient.getUserById(user.userId);
+  if (existingUser) {
+    res
+      .status(400)
+      .json({ errors: [ { error: 'User with the specific userId already exists' } ] });
+
+    return;
+  }
+
   try {
     await dbClient.putUser(user);
     res.status(201).json(user);
