@@ -6,7 +6,7 @@ This repository provisions an AWS Lambda app to handle HTTP requests via AWS API
 
 ```typescript
   {
-    id: string;
+    userId: string;
     name: string;
     /* Any valid Javascript date format. */
     dob: string;
@@ -19,21 +19,21 @@ Javascript date format information can be found [here](https://developer.mozilla
 The API exposes four endpoints:
 - `GET /user/:userId`
 
-  Returns a `user`.
+  Returns a `user` for `userId`.
   
 - `POST /users`
 
-  Creates a new user.
+  Creates a new user from the user passed in the payload.
 - `PUT /user/:userId`
 
-  Updates a user.
+  Updates a user by `userId` to the value in the payload.
 - `DELETE /user/:userId`
 
-  Deletes a user
+  Deletes a user by `userId`
 
 ## Usage
 
-These instructions assume the user has `serverless` installed and configured with deployment permissions to their AWS stack. Creating the necessary IAM user and associated keys is described [here](https://prasadlakshan.medium.com/configuring-aws-credentials-using-serverless-framework-1b53f0989af4#948f). Follow the steps until you have the access and secret keys for the user. Then use `aws configure` and pass in the keys.
+These instructions assume the user has `serverless` installed and configured with deployment permissions to their AWS stack. Creating the necessary IAM user and associated keys is described [here](https://prasadlakshan.medium.com/configuring-aws-credentials-using-serverless-framework-1b53f0989af4#948f). Follow the steps until you have the access and secret keys for the user. Then run `aws configure` to setup the environment to use the new IAM user's credentials.
 
 ### Deployment
 
