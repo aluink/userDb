@@ -25,6 +25,8 @@ class DbClient {
   }
 
   async putUser(user) {
+    console.dir(process.env);
+    console.log('user table', USERS_TABLE);
     const command = new PutCommand({
       TableName: USERS_TABLE,
       Item: user,

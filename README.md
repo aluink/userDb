@@ -33,7 +33,7 @@ The API exposes four endpoints:
 
 ## Usage
 
-These instructions assume the user has `serverless` installed and configured with deployment permissions to their AWS stack. For details on setting up a Serverless Dashboard provider, and other documentation, see this [link](https://www.serverless.com/framework/docs/guides/dashboard/providers).
+These instructions assume the user has `serverless` installed and configured with deployment permissions to their AWS stack. Creating the necessary IAM user and associated keys is described [here](https://prasadlakshan.medium.com/configuring-aws-credentials-using-serverless-framework-1b53f0989af4#948f). Follow the steps until you have the access and secret keys for the user. Then use `aws configure` and pass in the keys.
 
 ### Deployment
 
