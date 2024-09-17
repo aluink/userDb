@@ -17,17 +17,17 @@ This repository provisions an AWS Lambda app to handle HTTP requests via AWS API
 Javascript date format information can be found [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#date_time_string_format).
 
 The API exposes four endpoints:
-- `GET /user/:userId`
+- `GET /users/:userId`
 
   Returns a `user` for `userId`.
   
 - `POST /users`
 
   Creates a new user from the user passed in the payload.
-- `PUT /user/:userId`
+- `PUT /users/:userId`
 
   Updates a user by `userId` to the value in the payload.
-- `DELETE /user/:userId`
+- `DELETE /users/:userId`
 
   Deletes a user by `userId`
 
